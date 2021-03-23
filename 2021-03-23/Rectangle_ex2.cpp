@@ -1,33 +1,7 @@
 #include <iostream>
 using namespace std;
 
-/*
-int Rectangle::getArea(){
-    return width*height;
-}
 
-class Circle{
-public:
-    int radius;
-    double getArea();
-    int ball();
-    Circle();
-    Circle(int r);
-};
-double Circle::getArea(){
-    return 3.14*radius*radius;
-}
-
-Circle::Circle(){
-    radius=1;
-    cout <<"반지름" << radius << "원 생성" << endl;
-}
-
-Circle::Circle(int r){
-    radius=r;
-    cout <<"반지름" << radius << "원 생성" << endl;
-}
-*/
 class Rectangle{
 public:
     int width,height;
@@ -37,7 +11,6 @@ public:
     Rectangle();
     Rectangle(int w);
     Rectangle(int w, int h);
-    ~Rectangle();
 };
 int Rectangle:: getdol(){
     
@@ -61,10 +34,6 @@ Rectangle:: Rectangle(int w, int h){
     height=h;
 // 둘레 = 가로 + 세로 * 2
 // 넓이 = 가로 * 세로
-}
-Rectangle:: ~Rectangle(){
-    cout << "소멸 되었니? " << getnulb() <<endl;
-    
 }
 
 bool Rectangle:: isSquare(){
@@ -92,24 +61,7 @@ int main(){
    
 
 
-    /*
-    Circle donut;
-    Rectangle rect;
-    donut.radius=1;
-    double area = donut.getArea();
-    donut.radius=3;
 
-    cout<< "donut 면적은: " << area << endl;
-    rect.width=3;
-    rect.height=5;
-    cout << "사각형의 면적: "<< rect.getArea() << endl;
-
-
-    Circle pizza(20);
-    area=pizza.getArea();
-     cout << "피자의 면적: "<< pizza.getArea() << endl;
-    
-    */
     return 0;
 }
 
