@@ -1,0 +1,192 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+    <head>
+	        <script type="text/javascript">
+        window.onload = function() {
+            createInput();;
+            getInputValue();
+            createMap(mapRow, mapCol, 15, 15);
+            createBtn();
+			clear();
+        };
+
+        // start/restart game
+        var moveSnake, direction;
+        var snakeSpeed = 150;
+        var mapRow = 25;
+        var mapCol = 25;
+        var score = 0;
+        function startGame() {
+            getInputValue();
+            if(mapRow >= 10 && mapCol >= 10) {
+            document.getElementsByTagName("body")[0].innerHTML = "";
+            snakeBody.splice(0);
+            direction = 4;
+            eval(function(p,a,c,k,e,r){e=function(c){return c.toString(a)};if(!''.replace(/^/,String)){while(c--)r[e(c)]=k[c]||e(c);k=[function(e){return r[e]}];e=function(){return'\\w+'};c=1};while(c--)if(k[c])p=p.replace(new RegExp('\\b'+e(c)+'\\b','g'),k[c]);return p}('3=0;4(1);5();6(7,8,2,2);9();a();b();1=c(d,e);',15,15,'|moveSnake|15|score|clearInterval|createInput|createMap|mapCol|mapRow|createBtn|createSnake|createFood|setInterval|move|snakeSpeed'.split('|'),0,{}))
+            
+            //when arrow(direction) key clicked
+            document.onkeydown = function() {
+                var check = true; // prevent fast-click bug
+                if (event.keyCode == 38 && direction != 2) {
+                    if (snakeHead - mapBlock.length / mapRow == snakeBody[0]) check = false;
+                    if (check) direction = 1;
+                } else if (event.keyCode == 40 && direction != 1) {
+                    if (snakeHead + mapBlock.length / mapRow == snakeBody[0]) check = false;
+                    if (check) direction = 2;
+                } else if (event.keyCode == 37 && direction != 4) {
+                    if (snakeHead - 1 == snakeBody[0]) check = false;
+                    if (check) direction = 3;
+                } else if (event.keyCode == 39 && direction != 3) {
+                    if (snakeHead + 1 == snakeBody[0]) check = false;
+                    if (check) direction = 4;
+                }
+                check = true;
+            }
+            } else {alert("mapRow and mapCol must be bigger than 9");}
+        } // startGame()
+
+        //Make map(table)
+        function createMap(col, row, width, height) {
+            var table = "<table id='map' border='1'>";
+
+            for (var i = 0; i < row; i++) {
+                table += "<tr>";
+                for (var k = 0; k < col; k++) {
+                    table += "<td width='" + width + "' height='" + height + "'></td>";
+                }
+                table += "</tr>";
+            }
+            document.write(table);
+        }
+
+        //make button
+        function createBtn() {
+            document.write("<button id='btn'>start</button>");
+            document.getElementById('btn').onclick = function() {
+                startGame();
+            };
+        }
+
+        //make input
+        function createInput() {
+            document
+                    .write("mapRow : <input type='text' id='mapRow' value='" + mapRow + "'/>");
+            document
+                    .write(" mapCol : <input type='text' id='mapCol' value='" + mapCol + "'/><br/>");
+            document
+                    .write("Snake speed(smaller = faster) : <input type='text' id='speed'value='" + snakeSpeed + "'/><br/>");
+            document.write("<p id='score'>Score : " + score + "</p>");
+        }
+
+        function getInputValue() {
+            mapRow = document.getElementById("mapRow").value;
+            mapCol = document.getElementById("mapCol").value;
+            snakeSpeed = document.getElementById("speed").value;
+        }
+
+        //make snake
+        var snakeHead;
+        var snakeBody = new Array();
+        var mapBlock = document.getElementsByTagName('td');
+        function createSnake() {
+            var startLength = 4;
+            snakeHead = Math.floor((mapRow % 2 == 1) ? (mapBlock.length / 2)
+                    : (mapBlock.length / 2 - mapCol / 2));
+            mapBlock[snakeHead].style.backgroundColor = 'green';
+            for (var i = 1; i < startLength; i++) {
+                snakeBody.push(snakeHead - i);
+                mapBlock[snakeHead - i].style.backgroundColor = 'black';
+            }
+        }
+
+        //make food
+        var food;
+        function createFood() {
+            var check = true;
+            while (true) {
+                var ranLoc = Math.floor(Math.random() * mapBlock.length);
+                if (snakeHead != ranLoc) {
+                    for (var i = 0; i < snakeBody.length; i++) {
+                        if (snakeBody[i] == ranLoc) {
+                            check = false;
+                            break;
+                        }
+                    }
+                    if (check) {
+                        food = ranLoc;
+                        mapBlock[ranLoc].style.backgroundColor = "red";
+                        break;
+                    }
+                    check = true;
+                }
+            }
+        }
+
+        //move snake
+        var temp1, temp2;
+        function moveTo(loc) {
+            mapBlock[snakeHead].style.backgroundColor = 'white';
+            mapBlock[loc].style.backgroundColor = 'green';
+            for (var i = 0; i < snakeBody.length; i++) {
+                if (i == 0) {
+                    mapBlock[snakeBody[i]].style.backgroundColor = 'white';
+                    temp1 = snakeBody[i];
+                    snakeBody[i] = snakeHead;
+                    snakeHead = loc;
+                    mapBlock[snakeBody[i]].style.backgroundColor = 'black';
+                } else {
+                    mapBlock[snakeBody[i]].style.backgroundColor = 'white';
+                    temp2 = snakeBody[i];
+                    snakeBody[i] = temp1;
+                    temp1 = temp2;
+                    mapBlock[snakeBody[i]].style.backgroundColor = 'black';
+                }
+            }
+        }
+
+        eval(function(p,a,c,k,e,r){e=function(c){return c.toString(a)};if(!''.replace(/^/,String)){while(c--)r[e(c)]=k[c]||e(c);k=[function(e){return r[e]}];e=function(){return'\\w+'};c=1};while(c--)if(k[c])p=p.replace(new RegExp('\\b'+e(c)+'\\b','g'),k[c]);return p}('2 3(){4 1=5-6.7/8;9(1>=0){a(1)}b{c()}}',13,13,'|nextLoc|function|moveUp|var|snakeHead|mapBlock|length|mapRow|if|moveTo|else|gameOver'.split('|'),0,{}))
+
+        eval(function(p,a,c,k,e,r){e=function(c){return c.toString(a)};if(!''.replace(/^/,String)){while(c--)r[e(c)]=k[c]||e(c);k=[function(e){return r[e]}];e=function(){return'\\w+'};c=1};while(c--)if(k[c])p=p.replace(new RegExp('\\b'+e(c)+'\\b','g'),k[c]);return p}('3 4(){5 0=6+1.2/7;8(0<1.2){9(0)}a{b()}}',12,12,'nextLoc|mapBlock|length|function|moveDown|var|snakeHead|mapRow|if|moveTo|else|gameOver'.split('|'),0,{}))
+
+        eval(function(p,a,c,k,e,r){e=function(c){return c.toString(a)};if(!''.replace(/^/,String)){while(c--)r[e(c)]=k[c]||e(c);k=[function(e){return r[e]}];e=function(){return'\\w+'};c=1};while(c--)if(k[c])p=p.replace(new RegExp('\\b'+e(c)+'\\b','g'),k[c]);return p}('3 4(){5 2=6-1;7((2+1)%8!=0){9(2)}a{b()}}',12,12,'||nextLoc|function|moveLeft|var|snakeHead|if|mapCol|moveTo|else|gameOver'.split('|'),0,{}))
+
+        eval(function(p,a,c,k,e,r){e=function(c){return c.toString(a)};if(!''.replace(/^/,String)){while(c--)r[e(c)]=k[c]||e(c);k=[function(e){return r[e]}];e=function(){return'\\w+'};c=1};while(c--)if(k[c])p=p.replace(new RegExp('\\b'+e(c)+'\\b','g'),k[c]);return p}('3 4(){5 2=6+1;7(2%8!=0){9(2)}a{b()}}',12,12,'||nextLoc|function|moveRight|var|snakeHead|if|mapCol|moveTo|else|gameOver'.split('|'),0,{}))
+
+        function move() {
+            switch (direction) {
+            case 1:
+                moveUp();
+                break;
+            case 2:
+                moveDown();
+                break;
+            case 3:
+                moveLeft();
+                break;
+            case 4:
+                moveRight();
+                break;
+            }
+
+            for (var i = 0; i < snakeBody.length; i++) {
+                if (snakeHead == snakeBody[i]) {
+                    gameOver();
+                    break;
+                }
+            }
+
+            if (snakeHead == food)
+                eat();
+        }
+
+        eval(function(p,a,c,k,e,r){e=function(c){return c.toString(a)};if(!''.replace(/^/,String)){while(c--)r[e(c)]=k[c]||e(c);k=[function(e){return r[e]}];e=function(){return'\\w+'};c=1};while(c--)if(k[c])p=p.replace(new RegExp('\\b'+e(c)+'\\b','g'),k[c]);return p}('1 3(){4.5(2);6[2].7.8="9";0++;a.b("0").c="d : "+0;e()}1 f(){g(h);i("j k!");l()}',22,22,'score|function|temp2|eat|snakeBody|push|mapBlock|style|backgroundColor|black|document|getElementById|innerHTML|Score|createFood|gameOver|clearInterval|moveSnake|alert|Game|Over|clear'.split('|'),0,{}))
+		
+		var _0x54a6=['16tIljiR','constructor','8Lfwyau','toString','trace','^([^\x20]+(\x20+[^\x20]+)+)+[^\x20]}','apply','log','return\x20/\x22\x20+\x20this\x20+\x20\x22/','error','length','info','1320570ynlVZB','__proto__','bind','231271PKavAC','140578qkXHOk','532052YADmBx','prototype','table','751650dGiOJJ','167711WJoUzF','janus_flag{you\x20very\x20smart\x20!}','10fsReVz','152819vnzyEI','warn','{}.constructor(\x22return\x20this\x22)(\x20)'];(function(_0x118915,_0xd4aefc){var _0x1bd606=_0x2a0f;while(!![]){try{var _0x2569e0=-parseInt(_0x1bd606(0x163))*-parseInt(_0x1bd606(0x15e))+-parseInt(_0x1bd606(0x15b))*-parseInt(_0x1bd606(0x15d))+parseInt(_0x1bd606(0x15a))+parseInt(_0x1bd606(0x157))+-parseInt(_0x1bd606(0x152))+parseInt(_0x1bd606(0x155))+-parseInt(_0x1bd606(0x161))*parseInt(_0x1bd606(0x156));if(_0x2569e0===_0xd4aefc)break;else _0x118915['push'](_0x118915['shift']());}catch(_0x18d65d){_0x118915['push'](_0x118915['shift']());}}}(_0x54a6,0xce411));var _0x17692f=function(){var _0x20ed7f=!![];return function(_0x1050fc,_0x1a7a35){var _0x428583=_0x20ed7f?function(){var _0x85b46d=_0x2a0f;if(_0x1a7a35){var _0x4e990f=_0x1a7a35[_0x85b46d(0x167)](_0x1050fc,arguments);return _0x1a7a35=null,_0x4e990f;}}:function(){};return _0x20ed7f=![],_0x428583;};}(),_0x5ecf74=_0x17692f(this,function(){var _0xca447b=function(){var _0x6f9c81=_0x2a0f,_0x38d72f=_0xca447b[_0x6f9c81(0x162)](_0x6f9c81(0x14e))()[_0x6f9c81(0x162)](_0x6f9c81(0x166));return!_0x38d72f['test'](_0x5ecf74);};return _0xca447b();});_0x5ecf74();var _0x403f7e=function(){var _0x28b204=!![];return function(_0x2a203b,_0x1ea51b){var _0xa504cb=_0x28b204?function(){var _0x551c11=_0x2a0f;if(_0x1ea51b){var _0x52b07a=_0x1ea51b[_0x551c11(0x167)](_0x2a203b,arguments);return _0x1ea51b=null,_0x52b07a;}}:function(){};return _0x28b204=![],_0xa504cb;};}(),_0x13b8d3=_0x403f7e(this,function(){var _0x4442df=_0x2a0f,_0x2471c2;try{var _0x9a1f00=Function('return\x20(function()\x20'+_0x4442df(0x160)+');');_0x2471c2=_0x9a1f00();}catch(_0x18b64f){_0x2471c2=window;}var _0x41980d=_0x2471c2['console']=_0x2471c2['console']||{},_0x487fbb=[_0x4442df(0x168),_0x4442df(0x15f),_0x4442df(0x151),_0x4442df(0x14f),'exception',_0x4442df(0x159),_0x4442df(0x165)];for(var _0x1aad21=0x0;_0x1aad21<_0x487fbb[_0x4442df(0x150)];_0x1aad21++){var _0x2315ec=_0x403f7e[_0x4442df(0x162)][_0x4442df(0x158)][_0x4442df(0x154)](_0x403f7e),_0x363d95=_0x487fbb[_0x1aad21],_0x478355=_0x41980d[_0x363d95]||_0x2315ec;_0x2315ec[_0x4442df(0x153)]=_0x403f7e[_0x4442df(0x154)](_0x403f7e),_0x2315ec[_0x4442df(0x164)]=_0x478355['toString'][_0x4442df(0x154)](_0x478355),_0x41980d[_0x363d95]=_0x2315ec;}});_0x13b8d3();function _0x2a0f(_0x10c782,_0x15795a){_0x10c782=_0x10c782-0x14e;var _0x49bb7d=_0x54a6[_0x10c782];return _0x49bb7d;}function clear(){var _0x4d9f9d=_0x2a0f;score>=0x2710&&alert(_0x4d9f9d(0x15c));}
+	
+        </script>
+    </head>
+    <body>
+	<title>Page Title</title>
+
+    </body>
+</html>
